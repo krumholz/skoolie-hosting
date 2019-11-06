@@ -1,7 +1,10 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
     <button routerLink="/" class="example-icon" mat-button matTooltip="Home">
-      Skoolie
+      Home
+    </button>
+    <button routerLink="/map" class="example-icon" mat-button matTooltip="Map">
+      Map
     </button>
     <span class="example-spacer"></span>
     <div *ngIf="auth.user$ | async as user; else login">
@@ -9,7 +12,7 @@
         <mat-icon matTooltip="Sign out" aria-hidden="false" aria-label="Sign out">remove_circle</mat-icon>
       </button>
 
-      <button routerLink="/user-profile" class="example-icon" mat-button matTooltip="User profile">
+      <button routerLink="/user-profile" class="example-icon" mat-button matTooltip="Profile">
         <img class="profile-photo" [src]="user.photoURL">
       </button>
     </div>
