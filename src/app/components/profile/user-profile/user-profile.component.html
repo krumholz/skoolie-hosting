@@ -1,0 +1,21 @@
+<div *ngIf="auth.user$ | async; then authenticated else guest">
+
+</div>
+
+<ng-template #guest>
+  <h3>Howdy, GUEST</h3>
+  <p>Login to get started...</p>
+</ng-template>
+
+
+<ng-template #authenticated>
+  <mat-card *ngIf="auth.user$ | async as user;">
+    <mat-card-header>
+      <mat-card-title>{{ user.displayName }}</mat-card-title>
+      <mat-card-subtitle>{{ user.email }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <pre>{{ user | json }}</pre>
+    </mat-card-content>
+  </mat-card>
+</ng-template>
