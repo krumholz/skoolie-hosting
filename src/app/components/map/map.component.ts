@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LocationService } from 'src/app/services/location/location.service';
+import { PostService } from 'src/app/services/post/post.service';
 import { Subscription, Observable } from 'rxjs';
 
 @Component({
@@ -17,10 +17,10 @@ export class MapComponent implements OnInit {
   mapType = 'roadmap';
   zoomLevel = 5;
 
-  constructor(public locationService: LocationService) { }
+  constructor(public postService: PostService) { }
 
   ngOnInit() {
-    this.sub = this.locationService
+    this.sub = this.postService
       .getLocations()
       .subscribe(locations => (this.locations = locations));
   }

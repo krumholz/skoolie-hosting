@@ -7,7 +7,7 @@ import { switchMap, map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class LocationService {
+export class PostService {
 
   constructor(private db: AngularFirestore) { }
 
