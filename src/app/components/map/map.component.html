@@ -1,2 +1,16 @@
-<agm-map [latitude]='latitude' [longitude]='longitude' [mapTypeId]='mapType' [zoom]='4.9'>
+<agm-map [latitude]='latitude' [longitude]='longitude' [mapTypeId]='mapType' [zoom]='zoomLevel'>
+  <agm-marker
+    *ngFor="let marker of locations"
+    [latitude]="marker.location.lat"
+    [longitude]="marker.location.lon"
+    [iconUrl]="marker.pinStyle">
+    <agm-info-window>
+      <!-- <div *ngIf="marker.altText">
+        <h2>{{ marker.altText }}</h2>
+      </div> -->
+      <div *ngIf="marker.imgUrl">
+        <img [src]='marker.imgUrl' [alt]='marker.altText'>
+      </div>
+    </agm-info-window>
+  </agm-marker>
 </agm-map>

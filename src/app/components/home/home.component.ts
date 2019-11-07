@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { LocationService } from 'src/app/services/location/location.service';
+import { Subscription, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -8,9 +10,19 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(public auth: AuthService) { }
+  posts = [];
+  sub: Subscription;
+
+  constructor(public auth: AuthService, public locationService: LocationService) { }
 
   ngOnInit() {
+    this.sub = this.locationService
+      .getLocations()
+      .subscribe(locations => (this.posts = locations));
+  }
+
+  onClick(url) {
+    window.open(url);
   }
 
 }

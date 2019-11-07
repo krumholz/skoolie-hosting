@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { LocationService } from 'src/app/services/location/location.service';
+import { Subscription, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-map',
@@ -7,13 +9,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MapComponent implements OnInit {
 
-  latitude = 35.9853927;
-  longitude = -96.307165;
-  mapType = 'roadmap';
+  locations = [];
+  sub: Subscription;
 
-  constructor() { }
+  latitude = 40.2023553;
+  longitude = -95.4770781;
+  mapType = 'roadmap';
+  zoomLevel = 5;
+
+  constructor(public locationService: LocationService) { }
 
   ngOnInit() {
+    this.sub = this.locationService
+      .getLocations()
+      .subscribe(locations => (this.locations = locations));
   }
 
 }
