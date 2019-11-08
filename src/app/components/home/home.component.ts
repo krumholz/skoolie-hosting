@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { PostService } from 'src/app/services/post/post.service';
+import { UserService } from 'src/app/services/user/user.service';
 import { Subscription, Observable } from 'rxjs';
 
 @Component({
@@ -13,11 +13,11 @@ export class HomeComponent implements OnInit {
   posts = [];
   sub: Subscription;
 
-  constructor(public auth: AuthService, public postService: PostService) { }
+  constructor(public auth: AuthService, public userService: UserService) { }
 
   ngOnInit() {
-    this.sub = this.postService
-      .getLocations()
+    this.sub = this.userService
+      .getPostsByLocation()
       .subscribe(locations => (this.posts = locations));
   }
 

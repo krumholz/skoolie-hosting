@@ -1,28 +1,64 @@
-import { Component, OnInit } from '@angular/core';
-import { PostService } from 'src/app/services/post/post.service';
-import { Subscription, Observable } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { UserService } from 'src/app/services/user/user.service';
+import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
-export class MapComponent implements OnInit {
+export class MapComponent implements OnInit, OnDestroy {
 
-  locations = [];
-  sub: Subscription;
+  postLocations = [];
+  currentLocation = [];
+  friendsLocations = [];
+  userSub: Subscription;
+  myLocationSub: Subscription;
+  postLocationsSub: Subscription;
+  friendsLocationsSub: Subscription;
 
   latitude = 40.2023553;
   longitude = -95.4770781;
   mapType = 'roadmap';
   zoomLevel = 5;
 
-  constructor(public postService: PostService) { }
+  constructor(public auth: AuthService, public userService: UserService, private snackBar: MatSnackBar) {}
 
   ngOnInit() {
-    this.sub = this.postService
-      .getLocations()
-      .subscribe(locations => (this.locations = locations));
+    this.userSub = this.auth.user$.subscribe(
+      observer => {
+        if (!!observer) {
+          // console.log(observer);
+          this.myLocationSub = this.userService
+            .getCurrentLocation()
+            .subscribe(current => (this.currentLocation = current));
+          this.friendsLocationsSub = this.userService
+            .getFriendsCurrentLocations()
+            .subscribe(friends => (this.friendsLocations = friends));
+        } else {
+          this.snackBar.open('Log in to share and view locations', 'Close', {
+            duration: 6000
+          });
+          console.log('Log in to share and view locations');
+        }
+      }
+    );
+
+    this.postLocationsSub = this.userService
+      .getPostsByLocation()
+      .subscribe(posts => (this.postLocations = posts));
+  }
+
+  ngOnDestroy() {
+    this.userSub.unsubscribe();
+    this.postLocationsSub.unsubscribe();
+    this.friendsLocationsSub.unsubscribe();
+
+    if (this.myLocationSub) {
+      this.myLocationSub.unsubscribe();
+    }
   }
 
 }
