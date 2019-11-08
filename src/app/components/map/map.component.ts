@@ -14,10 +14,12 @@ export class MapComponent implements OnInit, OnDestroy {
   postLocations = [];
   currentLocation = [];
   friendsLocations = [];
+  myPosition = [];
   userSub: Subscription;
   myLocationSub: Subscription;
   postLocationsSub: Subscription;
   friendsLocationsSub: Subscription;
+  positionLocationSub: Subscription;
 
   latitude = 40.2023553;
   longitude = -95.4770781;
@@ -37,6 +39,9 @@ export class MapComponent implements OnInit, OnDestroy {
           this.friendsLocationsSub = this.userService
             .getFriendsCurrentLocations()
             .subscribe(friends => (this.friendsLocations = friends));
+          this.positionLocationSub = this.userService
+            .getCurrentLocation()
+            .subscribe(position => (this.myPosition = position));
         } else {
           this.snackBar.open('Log in to share and view locations', 'Close', {
             duration: 6000
@@ -52,12 +57,18 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+
     this.userSub.unsubscribe();
     this.postLocationsSub.unsubscribe();
-    this.friendsLocationsSub.unsubscribe();
 
     if (this.myLocationSub) {
       this.myLocationSub.unsubscribe();
+    }
+    if (this.friendsLocationsSub) {
+      this.friendsLocationsSub.unsubscribe();
+    }
+    if (this.positionLocationSub) {
+      this.positionLocationSub.unsubscribe();
     }
   }
 

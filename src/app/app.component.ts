@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from './services/auth/auth.service';
+import { UserService } from './services/user/user.service';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +9,13 @@ import { AuthService } from './services/auth/auth.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'skoolie';
 
-  constructor(public auth: AuthService) { }
+  constructor(private snackBar: MatSnackBar, public auth: AuthService, public userService: UserService) {}
+
+  requstPosition() {
+    this.userService.requestPosition().then(pos => {
+      console.log(`lat: ${pos.lat}, lon: ${pos.lng}`);
+      this.snackBar.open(`lat: ${pos.lat}, lon: ${pos.lng}`, 'close');
+    });
+  }
 }
