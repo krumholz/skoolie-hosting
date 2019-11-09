@@ -1,17 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from './services/auth/auth.service';
 import { UserService } from './services/user/user.service';
 import { Observable, of } from 'rxjs';
+import * as firebase from 'firebase/app';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   constructor(private snackBar: MatSnackBar, public auth: AuthService, public userService: UserService) {}
+
+  ngOnInit() {
+    firebase.analytics();
+  }
 
   requstPosition() {
     this.userService.requestPosition().then(pos => {

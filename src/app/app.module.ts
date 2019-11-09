@@ -5,6 +5,8 @@ import { environment } from '../environments/environment';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFirePerformanceModule } from '@angular/fire/performance';
 
 import { AgmCoreModule } from '@agm/core';
 
@@ -26,12 +28,15 @@ import { MapComponent } from './components/map/map.component';
   imports: [
     BrowserModule,
     AgmCoreModule.forRoot({
+      // Google Maps API Key
       apiKey: 'AIzaSyADNcOBV1r533yDUvFqivkewARQk_CNb2g'
     }),
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule,
+    AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,
+    AngularFirePerformanceModule,
+    AngularFireStorageModule,
     BrowserAnimationsModule,
     MaterialModule
   ],
