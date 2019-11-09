@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { auth } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
-// import * as firebase from 'firebase/app';
+import * as firebase from 'firebase/app';
 import { switchMap, map } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,10 +13,19 @@ import { AuthService } from '../auth/auth.service';
 export class UserService {
 
   userId: string;
+  user: {};
+  coords$: Observable<any>;
 
-  constructor(private db: AngularFirestore, public authService: AuthService) {
+  constructor(
+    private db: AngularFirestore,
+    private afs: AngularFirestore,
+    public authService: AuthService
+    ) {
     this.authService.user$.subscribe(user => {
-      if (user) { this.userId = user.uid; }
+      if (user) {
+        this.userId = user.uid;
+        this.user = user;
+      }
     });
   }
 
@@ -45,7 +55,7 @@ export class UserService {
     return this.db
       .collectionGroup('shared', ref =>
         ref
-          .where('requesterUID', '==', `${this.userId}`)
+          .where('friend.uid', '==', `${this.userId}`)
           .where('visible', '==', true)
           .limit(20))
       .valueChanges();
@@ -60,5 +70,21 @@ export class UserService {
         reject(err);
       });
     });
+  }
+
+  async saveLocation(location) {
+    if (!this.user) { return; }
+    const locationRef = this.afs
+      .collection(`users/${this.userId}/locations/`);
+
+    const data = {
+      user: this.user,
+      location,
+      visibility: 'hidden',
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    console.log(data);
+    return locationRef.add(data);
   }
 }

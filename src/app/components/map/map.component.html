@@ -3,6 +3,39 @@
   [longitude]='longitude'
   [mapTypeId]='mapType'
   [zoom]='zoomLevel'>
+    <div *ngIf="userService.coords$ | async as position;">
+      <agm-marker
+        [latitude]="position.lat"
+        [longitude]="position.lon"
+        iconUrl="https://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
+        [markerDraggable]="true"
+        (dragEnd)="dragMarker($event)">
+        <agm-info-window>
+          Drag pin to edit your location
+          <button (markerClick)="userService.saveLocation($event)" class="example-icon" mat-button>
+            <mat-icon matTooltip="Save" aria-hidden="false" aria-label="Save">
+              save
+            </mat-icon>
+          </button>
+        </agm-info-window>
+      </agm-marker>
+    </div>
+
+    <div *ngIf="currentLocation">
+      <agm-marker
+        *ngFor="let current of currentLocation"
+        [latitude]="current.location.coords.lat"
+        [longitude]="current.location.coords.lng">
+          <agm-info-window>
+            <strong>{{ current.user.displayName }}</strong>
+            <br>
+            <strong>{{ current.user.email }}</strong>
+            <br>
+            <img [src]='current.user.photoURL'>
+          </agm-info-window>
+      </agm-marker>
+    </div>
+
     <agm-marker
       *ngFor="let marker of postLocations"
       [latitude]="marker.location.lat"
@@ -18,38 +51,13 @@
     <div *ngIf="friendsLocations">
       <agm-marker
         *ngFor="let friends of friendsLocations"
-        [latitude]="friends.lat"
-        [longitude]="friends.lon"
+        [latitude]="friends.location.coords.lat"
+        [longitude]="friends.location.coords.lng"
         iconUrl="https://maps.google.com/mapfiles/ms/icons/blue-dot.png">
           <agm-info-window>
-            <div *ngIf="friends.photoUrl">
-              <img [src]='friends.photoUrl'>
-            </div>
-          </agm-info-window>
-      </agm-marker>
-    </div>
-
-    <div *ngIf="currentLocation">
-      <agm-marker
-        *ngFor="let current of currentLocation"
-        [latitude]="current.lat"
-        [longitude]="current.lon"
-        [iconUrl]="current.pinStyle">
-          <agm-info-window>
-            Your Location
-          </agm-info-window>
-      </agm-marker>
-    </div>
-
-    <div *ngIf="myPosition">
-      <agm-marker
-        *ngFor="let current of myPosition"
-        [latitude]="current.lat"
-        [longitude]="current.lon"
-        iconUrl="https://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
-        [markerDraggable]="true">
-          <agm-info-window>
-            Your Location
+            <strong>{{ friends.user.displayName }}</strong>
+            <br>
+            <img [src]='friends.user.photoURL'>
           </agm-info-window>
       </agm-marker>
     </div>

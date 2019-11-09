@@ -56,6 +56,15 @@ export class MapComponent implements OnInit, OnDestroy {
       .subscribe(posts => (this.postLocations = posts));
   }
 
+  dragMarker(event) {
+    // console.log({ lat: event.coords.lat, lon: event.coords.lng });
+    this.userService.saveLocation(event);
+    // this.selectedMarker = {
+    //   lat: event.latitude,
+    //   lng: event.longitude
+    // };
+  }
+
   ngOnDestroy() {
 
     this.userSub.unsubscribe();
