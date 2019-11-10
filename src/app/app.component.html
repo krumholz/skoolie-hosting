@@ -14,7 +14,7 @@
     </button> -->
     <span class="example-spacer"></span>
     <div *ngIf="auth.user$ | async as user; else login">
-      <button (click)="requstPosition()" class="example-icon" mat-button>
+      <button *ngIf="router.url == '/map'" (click)="requstPosition()" class="example-icon" mat-button>
         <mat-icon matTooltip="My Location" aria-hidden="false" aria-label="My Location">
           my_location
         </mat-icon>

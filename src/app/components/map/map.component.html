@@ -6,19 +6,19 @@
     <div *ngIf="userService.coords$ | async as position;">
       <agm-marker
         [latitude]="position.lat"
-        [longitude]="position.lon"
+        [longitude]="position.lng"
         iconUrl="https://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
         [markerDraggable]="true"
         (dragEnd)="dragMarker($event)">
         <agm-info-window>
-          Drag pin to edit your location
-          <button (markerClick)="userService.saveLocation($event)" class="example-icon" mat-button>
-            <mat-icon matTooltip="Save" aria-hidden="false" aria-label="Save">
-              save
-            </mat-icon>
-          </button>
+          Drag marker to set your location
         </agm-info-window>
       </agm-marker>
+      <agm-circle
+        [latitude]="position.lat"
+        [longitude]="position.lng"
+        [radius]="position.accuracy">
+      </agm-circle>
     </div>
 
     <div *ngIf="currentLocation">

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from 'src/app/services/user/user.service';
-import { Subscription } from 'rxjs';
+import { Subscription, of } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -57,16 +57,13 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   dragMarker(event) {
-    // console.log({ lat: event.coords.lat, lon: event.coords.lng });
     this.userService.saveLocation(event);
-    // this.selectedMarker = {
-    //   lat: event.latitude,
-    //   lng: event.longitude
-    // };
   }
 
   ngOnDestroy() {
 
+    this.userService.coords$ = of();
+    this.snackBar.dismiss();
     this.userSub.unsubscribe();
     this.postLocationsSub.unsubscribe();
 

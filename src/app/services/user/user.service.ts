@@ -61,15 +61,16 @@ export class UserService {
       .valueChanges();
   }
 
-  requestPosition(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(resp => {
-        resolve({ lng: resp.coords.longitude, lat: resp.coords.latitude });
-      },
-      err => {
-        reject(err);
+  getPosition = (options) => {
+    if (navigator.geolocation) {
+      return new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, options);
       });
-    });
+    } else {
+      return new Promise(
+        reject => reject('Your browser does not support geolocation.')
+      );
+    }
   }
 
   async saveLocation(location) {
