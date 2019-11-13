@@ -16,9 +16,11 @@ export class UserService {
   user: {};
   coords$: Observable<any>;
 
+  // private sharedDoc: AngularFirestoreDocument<any>;
+  // sharedWith: Observable<any>;
+
   constructor(
     private db: AngularFirestore,
-    private afs: AngularFirestore,
     public authService: AuthService
     ) {
     this.authService.user$.subscribe(user => {
@@ -61,6 +63,16 @@ export class UserService {
       .valueChanges();
   }
 
+  locationSharedWith(): Observable<any> {
+    if (!this.userId) { return; }
+    return this.db
+      .doc(`users/${this.userId}/trusted/location_sharing`)
+      .valueChanges()
+      .pipe(
+        map((val: any) => val.friends)
+      );
+  }
+
   getPosition = (options) => {
     if (navigator.geolocation) {
       return new Promise((resolve, reject) => {
@@ -75,13 +87,13 @@ export class UserService {
 
   async saveLocation(location) {
     if (!this.user) { return; }
-    const locationRef = this.afs
+    const locationRef = this.db
       .collection(`users/${this.userId}/locations/`);
 
     const data = {
       user: this.user,
       location,
-      visibility: 'hidden',
+      visibility: 'private',
       timestamp: firebase.firestore.FieldValue.serverTimestamp()
     };
 

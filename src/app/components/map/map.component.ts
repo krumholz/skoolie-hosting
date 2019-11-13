@@ -1,19 +1,23 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from 'src/app/services/user/user.service';
-import { Subscription, of } from 'rxjs';
+import { Subscription, of, Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { filter, groupBy } from 'rxjs/operators';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.scss']
+  styleUrls: [
+    './map.component.scss',
+    '../../../../node_modules/snazzy-info-window/dist/snazzy-info-window.css'
+  ]
 })
 export class MapComponent implements OnInit, OnDestroy {
 
   postLocations = [];
   currentLocation = [];
-  friendsLocations = [];
+  friendsLocations: Observable<any>;
   myPosition = [];
   userSub: Subscription;
   myLocationSub: Subscription;
@@ -32,13 +36,12 @@ export class MapComponent implements OnInit, OnDestroy {
     this.userSub = this.auth.user$.subscribe(
       observer => {
         if (!!observer) {
-          // console.log(observer);
           this.myLocationSub = this.userService
             .getCurrentLocation()
             .subscribe(current => (this.currentLocation = current));
           this.friendsLocationsSub = this.userService
             .getFriendsCurrentLocations()
-            .subscribe(friends => (this.friendsLocations = friends));
+            .subscribe((friends: any) => (this.friendsLocations = friends));
           this.positionLocationSub = this.userService
             .getCurrentLocation()
             .subscribe(position => (this.myPosition = position));

@@ -9,6 +9,9 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFirePerformanceModule } from '@angular/fire/performance';
 
 import { AgmCoreModule } from '@agm/core';
+import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
+import { AgmOverlays } from 'agm-overlays';
+import { AgmSnazzyInfoWindowModule } from '@agm/snazzy-info-window';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -21,23 +24,26 @@ import { MapComponent } from './components/map/map.component';
 @NgModule({
   declarations: [
     AppComponent,
-    UserProfileComponent,
     HomeComponent,
-    MapComponent
+    MapComponent,
+    UserProfileComponent
   ],
   imports: [
-    BrowserModule,
     AgmCoreModule.forRoot({
       // Google Maps API Key
       apiKey: 'AIzaSyADNcOBV1r533yDUvFqivkewARQk_CNb2g'
     }),
-    AppRoutingModule,
+    AgmJsMarkerClustererModule,
+    AgmOverlays,
+    AgmSnazzyInfoWindowModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,
     AngularFirePerformanceModule,
     AngularFireStorageModule,
+    AppRoutingModule,
     BrowserAnimationsModule,
+    BrowserModule,
     MaterialModule
   ],
   providers: [],

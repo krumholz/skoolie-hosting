@@ -11,15 +11,24 @@
 
 
 <ng-template #authenticated>
-  <div class="top-margin">
-    <mat-card *ngIf="auth.user$ | async as user;">
-      <mat-card-header>
-        <mat-card-title>{{ user.displayName }}</mat-card-title>
-        <mat-card-subtitle>{{ user.email }}</mat-card-subtitle>
-      </mat-card-header>
+  <div *ngIf="auth.user$ | async as user;" class="top-margin">
+    <h1>{{ user.displayName }}</h1>
+    <mat-card>
       <mat-card-content>
         <pre>{{ user | json }}</pre>
       </mat-card-content>
+    </mat-card>
+
+    <h2>Sharing your location with :</h2>
+    <mat-card *ngFor="let friend of sharedWith">
+      <mat-card-header>
+        <div mat-card-avatar class="profile-avatar" [style.background-image]="'url(' + friend.photoURL + ')'"></div>
+        <mat-card-title>{{ friend.displayName }}</mat-card-title>
+        <mat-card-subtitle>{{ friend.email }}</mat-card-subtitle>
+      </mat-card-header>
+      <!-- <mat-card-content>
+        <pre>{{ friend | json }}</pre>
+      </mat-card-content> -->
     </mat-card>
   </div>
 </ng-template>

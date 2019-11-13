@@ -21,7 +21,7 @@
       </agm-circle>
     </div>
 
-    <div *ngIf="currentLocation">
+    <!-- <div *ngIf="currentLocation">
       <agm-marker
         *ngFor="let current of currentLocation"
         [latitude]="current.location.coords.lat"
@@ -34,31 +34,45 @@
             <img [src]='current.user.photoURL'>
           </agm-info-window>
       </agm-marker>
+    </div> -->
+
+    <agm-marker-cluster
+      imagePath="https://raw.githubusercontent.com/googlemaps/v3-utility-library/master/markerclustererplus/images/m">
+        <agm-marker
+          *ngFor="let marker of postLocations"
+          [latitude]="marker.location.lat"
+          [longitude]="marker.location.lon"
+          [iconUrl]="marker.pinStyle">
+            <agm-info-window>
+              <div *ngIf="marker.imgUrl">
+                <img [src]='marker.imgUrl' [alt]='marker.altText'>
+              </div>
+            </agm-info-window>
+        </agm-marker>
+    </agm-marker-cluster>
+
+    <div *ngIf="currentLocation">
+      <agm-overlay *ngFor="let current of currentLocation" [latitude]="current.location.coords.lat"
+        [longitude]="current.location.coords.lng">
+        <img [matTooltip]="current.user.email" matTooltipPosition="above" class="profile-photo"
+          [src]="current.user.photoURL">
+      </agm-overlay>
     </div>
 
-    <agm-marker
-      *ngFor="let marker of postLocations"
-      [latitude]="marker.location.lat"
-      [longitude]="marker.location.lon"
-      [iconUrl]="marker.pinStyle">
-        <agm-info-window>
-          <div *ngIf="marker.imgUrl">
-            <img [src]='marker.imgUrl' [alt]='marker.altText'>
-          </div>
-        </agm-info-window>
-    </agm-marker>
+    <agm-marker-cluster
+      imagePath="https://raw.githubusercontent.com/googlemaps/v3-utility-library/master/markerclustererplus/images/m">
+      <div *ngIf="friendsLocations">
+        <agm-overlay
+          *ngFor="let friends of friendsLocations"
+          [latitude]="friends.location.coords.lat"
+          [longitude]="friends.location.coords.lng">
+            <img
+              [matTooltip]="friends.user.email"
+              matTooltipPosition="above"
+              class="profile-photo"
+              [src]="friends.user.photoURL">
+        </agm-overlay>
+      </div>
+    </agm-marker-cluster>
 
-    <div *ngIf="friendsLocations">
-      <agm-marker
-        *ngFor="let friends of friendsLocations"
-        [latitude]="friends.location.coords.lat"
-        [longitude]="friends.location.coords.lng"
-        iconUrl="https://maps.google.com/mapfiles/ms/icons/blue-dot.png">
-          <agm-info-window>
-            <strong>{{ friends.user.displayName }}</strong>
-            <br>
-            <img [src]='friends.user.photoURL'>
-          </agm-info-window>
-      </agm-marker>
-    </div>
 </agm-map>
