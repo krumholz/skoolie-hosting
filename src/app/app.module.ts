@@ -20,13 +20,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './modules/material-module/material-module.module';
 import { HomeComponent } from './components/home/home.component';
 import { MapComponent } from './components/map/map.component';
+import { DocumentationComponent } from './components/documentation/documentation.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     MapComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    DocumentationComponent
   ],
   imports: [
     AgmCoreModule.forRoot({
