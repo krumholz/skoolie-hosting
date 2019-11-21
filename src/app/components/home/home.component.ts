@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { Subscription, Observable } from 'rxjs';
@@ -8,21 +8,23 @@ import { Subscription, Observable } from 'rxjs';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
-
+export class HomeComponent implements OnInit, OnDestroy {
   posts = [];
-  sub: Subscription;
+  locationSub: Subscription;
 
-  constructor(public auth: AuthService, public userService: UserService) { }
+  constructor(public auth: AuthService, public userService: UserService) {}
 
   ngOnInit() {
-    this.sub = this.userService
+    this.locationSub = this.userService
       .getPostsByLocation()
       .subscribe(locations => (this.posts = locations));
   }
 
-  onClick(url) {
+  openLink(url) {
     window.open(url);
   }
 
+  ngOnDestroy() {
+    this.locationSub.unsubscribe();
+  }
 }

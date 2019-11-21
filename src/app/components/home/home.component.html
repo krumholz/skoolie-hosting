@@ -6,7 +6,7 @@
         {{ post.description }}
       </mat-card-content>
       <mat-card-actions>
-        <button mat-button (click)="onClick(post.url)">{{ post.type ? post.type : 'LINK'}}</button>
+        <button mat-button (click)="openLink(post.url)">{{ post.type }}</button>
       </mat-card-actions>
     </mat-card>
   </div>
